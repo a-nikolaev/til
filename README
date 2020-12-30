@@ -1,0 +1,74 @@
+
+til is a command line tool for taking notes.
+
+Requirements:
+  Ruby
+  RubyGems: sqlite3, xdg, colorize
+
+Installation:
+  Copy til.rb script into ~/.local/bin/
+  Rename it as til
+
+Commands:
+  til add                      open the text editor (by default, Vim) to add a new note
+  til find [LIST OF KEYWORDS]  find and display notes containing keywords (in title or tagline)
+  til edit NUMBER              edit the note number NUMBER
+  til del NUMBER               delete the note number NUMBER 
+  til clear                    delete all notes
+  til export                   output all notes in JSON format
+  til import [FILENAME]        imports notes from a JSON file (or STDIN if no FILENAME)
+  
+Creating a new note:
+  When creating a new note in the editor, the entered text should be structured as follows:
+  
+    - the first line is the TITLE
+    - the second line is the LIST OF TAGS (can be left empty)
+    - all remaining lines is the note content
+
+  Example:
+  *----------------------------------------------------------------------*
+    Apple pancakes                                                         -  title
+    recipe apple pancake favorite                                          -  tagline
+    1. Preheat oven to 400 degrees F (200 degrees C).                      \ 
+    2. Melt butter in an oven-safe skillet over medium heat;               |
+       cook and stir apple slices, about 1/4 cup sugar,                    |
+       and cinnamon in butter until apples are tender, about 5 minutes.    |
+    3. Beat eggs, milk, flour, remaining 1/4 cup sugar, baking powder,      > content
+       vanilla extract, and salt in a large bowl until batter is smooth;   |
+       pour batter evenly over apples.                                     |
+    4. Bake in the preheated oven until golden brown, about 10 minutes.    |
+       Run a spatula around the edges of the pancake to loosen.            |
+       Invert skillet over a large plate to serve.                         /
+  *----------------------------------------------------------------------*
+
+Notes lookup:
+  Command `til find [KEYWORDSLIST]` looks up for the notes that contain the 
+  requested keywords in the title or in the list of tags.
+  
+  In other words, the difference between the title and the tag list is 
+  aesthetic (when the notes are displayed, the title is shown in bright green,
+  while tags are shown in dark gray). 
+
+  The command displays only the notes with the maximum number of 
+  matched keywords (that is, not all keywords must match).
+
+Customization:
+  - Change your preferred text editor in the function `edit_entry()`
+    (Vim is the default editor).
+  - Change the color scheme at the end of the function `run()`,
+    where the notes are printed out, search for the method `colorize`.
+
+Notes storage:
+  The notes database is stored in $XDG_DATA_HOME/til/notes.db
+  (On Linux, it is usually ~/.local/share/til/notes.db)
+
+Suggestions:
+  If a distinction between the title text and tags is desirable, one can 
+  prepend tags with a dash or underscore symbol: -recipe -apple -cinnamon
+  Prepending with # will not work, since # symbols are discarded when
+  matching keywords, however one can edit the regexp in `normalize_word()`
+  function to preserve other punctuation symbols, in addition to - and _
+
+License:
+  The software is distributed under the Zero-Clause BSD license.
+
